@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {link} from 'react-router'
+import React, { Component } from 'react' // 引入React
+import { Link } from 'react-router' // 引入Link处理导航跳转
 
 export default class App extends Component {
     render() {
