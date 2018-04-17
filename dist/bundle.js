@@ -44568,7 +44568,7 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; // reducers/count.js
 
 
-	exports.default = updateData;
+	exports.default = update;
 
 	var _constants = __webpack_require__(606);
 
@@ -44576,10 +44576,11 @@
 
 	var ininialData = {
 	    number: 1,
-	    staticData: [{ text: '整个应用的 state 被储存在一棵 object tree 中，并且这个 object tree 只存在于唯一一个 store 中。' }, { text: '惟一改变 state 的方法就是触发 action，action 是一个用于描述已发生事件的普通对象。' }, { text: '为了描述 action 如何改变 state tree ，你需要编写 reducers。' }, { text: '就是这样，现在你应该明白 Redux 是怎么回事了。' }]
+	    staticData: [{ text: '整个应用的 state 被储存在一棵 object tree 中，并且这个 object tree 只存在于唯一一个 store 中。' }, { text: '惟一改变 state 的方法就是触发 action，action 是一个用于描述已发生事件的普通对象。' }, { text: '为了描述 action 如何改变 state tree ，你需要编写 reducers。' }, { text: '就是这样，现在你应该明白 Redux 是怎么回事了。' }],
+	    data: []
 	};
 
-	function updateData() {
+	function update() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ininialData;
 	    var action = arguments[1];
 
@@ -44590,6 +44591,11 @@
 	        case _constants.DECREASE:
 	            return _extends({}, state, { number: state.number - action.amount });
 	            break;
+	        case _constants.GETSUCCESS:
+	            return _extends({}, state, { data: action.json });
+	            break;
+	        case _constants.REFRESHDATA:
+	            return _extends({}, state, { data: [] });
 	        default:
 	            return state;
 	    }
@@ -44928,7 +44934,7 @@
 
 	var clearData = exports.clearData = function clearData() {
 	    return {
-	        type: CLEARDATA
+	        type: _constants.REFRESHDATA
 	    };
 	};
 
@@ -44945,7 +44951,7 @@
 	        return fetch('data.json').then(function (res) {
 	            console.log(res);return res.json();
 	        }).then(function (data) {
-	            dispatch(data);
+	            dispatch(getSuccess(data));
 	        }).catch(function (err) {
 	            console.log(err.message);
 	        });
@@ -45102,6 +45108,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(159);
+
+	var _count = __webpack_require__(611);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45122,10 +45132,44 @@
 	    _createClass(Bar, [{
 	        key: 'render',
 	        value: function render() {
+	            var _props = this.props,
+	                lists = _props.lists,
+	                fetchPostsIfNeeded = _props.fetchPostsIfNeeded,
+	                clearData = _props.clearData;
+
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Bar'
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'btn-group' },
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'button', className: 'btn btn-default', onClick: function onClick() {
+	                                return fetchPostsIfNeeded();
+	                            } },
+	                        '\u52A0\u8F7D\u6570\u636E'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { type: 'button', className: 'btn btn-default', onClick: function onClick() {
+	                                return clearData();
+	                            } },
+	                        '\u6E05\u9664\u6570\u636E'
+	                    )
+	                ),
+	                lists.map(function (item, index) {
+	                    return _react2.default.createElement(
+	                        'div',
+	                        { className: 'well well-sm', key: index },
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: item.url },
+	                            item.title
+	                        )
+	                    );
+	                })
 	            );
 	        }
 	    }]);
@@ -45133,7 +45177,13 @@
 	    return Bar;
 	}(_react.Component);
 
-	exports.default = Bar;
+	var getList = function getList(state) {
+	    return {
+	        lists: state.update.data
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(getList, { fetchPostsIfNeeded: _count.fetchPostsIfNeeded, clearData: _count.clearData })(Bar);
 
 /***/ }),
 /* 615 */
@@ -45174,7 +45224,7 @@
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Antd'
+	                'antd'
 	            );
 	        }
 	    }]);

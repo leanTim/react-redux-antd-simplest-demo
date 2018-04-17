@@ -17,7 +17,7 @@ export const decrease = num => {
 
 export const clearData = () => {
     return {
-        type: CLEARDATA
+        type: REFRESHDATA
     }
 }
 
@@ -33,7 +33,7 @@ function fetchPost () {
     return dispatch => {
         return fetch('data.json')
         .then(res => {console.log(res); return res.json()})
-        .then(data => {dispatch(data)})
+        .then(data => {dispatch(getSuccess(data))})
         .catch((err) => {console.log(err.message)})
     }
 }
