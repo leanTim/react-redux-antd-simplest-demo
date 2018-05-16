@@ -1,31 +1,28 @@
-import React, {Component, PropTypes} from 'react'
-import List from '../components/List.js'
+import React, {Component} from 'react';
 import {connect} from 'react-redux'
+import List from '../components/List.js'
 
- class Foo extends Component {
-
+class Foo extends Component {
     render () {
-        const {lists} = this.props
+        const {staticData} = this.props
+
         return (
             <div>
-                <ul className="list-group">
-                    {lists.map((item, index) => {
-                        return <List text={item.text} key={index}></List>
-                    })}
+                <ul>
+                    {staticData.map((ele, index) => 
+                        <List text={ele.text} key={index}></List>
+                    )}
                 </ul>
             </div>
         )
     }
 }
 
-Foo.PropTypes = {
-    lists: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired
-    }).isRequired).isRequired
+const getStaticData = (state) => {
+    return {
+        staticData: state.update.staticData
+    }
 }
 
-const getList = (state) => {
-    return {lists: state.update.staticData}
-}
+export default connect(getStaticData)(Foo)
 
-export default connect(getList)(Foo)

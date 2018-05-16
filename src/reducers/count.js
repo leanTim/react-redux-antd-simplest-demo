@@ -1,7 +1,7 @@
 // reducers/count.js
 import { INCREASE, DECREASE, GETSUCCESS, REFRESHDATA } from '../constants' // 引入action类型常量名
 
-const ininialData = {
+const initialData = {
     number: 1,
     staticData : [
         {text: '整个应用的 state 被储存在一棵 object tree 中，并且这个 object tree 只存在于唯一一个 store 中。'},
@@ -12,21 +12,23 @@ const ininialData = {
     data: []
 }
 
-
-export default function update (state = ininialData, action) {
+export default function update (state = initialData, action) {
     switch (action.type) {
-        case INCREASE :
-            return Object.assign({}, state, {number: state.number + action.amount})
-            break
-        case DECREASE :
-            return Object.assign({}, state, {number: state.number - action.amount})
-            break
-        case GETSUCCESS :
-            return Object.assign({}, state, {data: action.json})
-            break
-        case REFRESHDATA :
-            return Object.assign({}, state, {data: []})
-        default :
-            return state
+        case INCREASE:
+            return Object.assign({}, state, {number: state.number + action.count});
+            break;
+        case DECREASE:
+            return Object.assign({}, state, {number: state.number - action.count});
+            break;
+        case GETSUCCESS: 
+            return Object.assign({}, state, {data: action.json});
+            break;
+        case REFRESHDATA:
+            return Object.assign({}, state, {data: []});
+            break;
+        default: 
+            return state;
     }
+
+
 }

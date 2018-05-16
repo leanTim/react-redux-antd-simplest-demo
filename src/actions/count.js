@@ -1,46 +1,47 @@
-import { INCREASE, DECREASE, GETSUCCESS, REFRESHDATA } from '../constants'  // 引入action类型名常量
+import {INCREASE, DECREASE, GETSUCCESS, LOADTATA, REFRESHDATA} from '../constants.js'
+import 'whatwg-fetch'
 
 
-export const increase = num => {
+export const increase = n => {
     return {
         type: INCREASE,
-        amount: num
+        count: n
     }
 }
 
-export const decrease = num => {
+export const decrease = n => {
     return {
         type: DECREASE,
-        amount: num
+        count: n
     }
 }
 
-export const clearData = () => {
+export const refreshData = () => {
     return {
         type: REFRESHDATA
     }
 }
 
-export const getSuccess = json => {
+export const getSuccess = (json) => {
     return {
         type: GETSUCCESS,
         json
     }
 }
 
-//异步操作
 function fetchPost () {
     return dispatch => {
-        return fetch('data.json')
+        fetch('data.json')
         .then(res => {console.log(res); return res.json()})
         .then(data => {dispatch(getSuccess(data))})
-        .catch((err) => {console.log(err.message)})
+        .catch(err => {console.log(err)})
     }
+
 }
 
-
-export function fetchPostsIfNeeded () {
+export function fetchPostIfNedded () {
     return (dispatch, getState) => {
         return dispatch(fetchPost())
     }
+
 }
